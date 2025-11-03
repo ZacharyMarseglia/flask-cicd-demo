@@ -1,13 +1,16 @@
 name: Build and Push Docker Image
+
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
+  workflow_dispatch:   # allows manual run from the Actions tab
 
 jobs:
   docker:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout
+      - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Log in to DockerHub
@@ -19,5 +22,7 @@ jobs:
       - name: Build and Push
         uses: docker/build-push-action@v5
         with:
+          context: .
+          file: ./Dockerfile
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/flask-cicd-demo:latest
